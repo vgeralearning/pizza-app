@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import "./index.css";
 
 const pizzaData = [
   {
@@ -48,21 +49,71 @@ const pizzaData = [
 
 function App() {
   return (
-    <>
-      <Pizza />
-      <Pizza />
-      <Pizza />
-    </>
+    <div className="container">
+      <Header />
+      <Menu />
+      <Footer />
+    </div>
   );
 }
 
-function Pizza() {
+function Header() {
+  // const style = { color: "red", fontSize: "48px", textTransform: "uppercase" };
   return (
-    <>
-      <img src="pizzas/spinaci.jpg" alt="spinaci pizza" />
-      <h2>Pizza Prosciutto</h2>
-      <p>Tomato, mozarella, ham, aragula, and burrata cheese</p>
-    </>
+    <header className="header">
+      <h1>Fast React Pizza Co.</h1>;
+    </header>
+  );
+}
+
+function Menu() {
+  const pizzas = pizzaData;
+  return (
+    <main className="menu">
+      <h2>Our menu</h2> <br></br>
+      {pizzas.length > 0 ? (
+        <ul className="pizzas">
+          {pizzas.map((el, index) => (
+            <li>
+              <Pizza pizzaObj={el} key={index} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>There is no pizzas now</p>
+      )}
+    </main>
+  );
+}
+
+function Footer() {
+  const openingHour = 8;
+  const closingHour = 22;
+  const currentTime = new Date().getHours();
+  const isOpenNow = currentTime >= openingHour && currentTime <= closingHour;
+
+  return (
+    <footer className="footer">
+      {isOpenNow && (
+        <div className="order">
+          <p>We are open till {closingHour}:00</p>
+          <button className="btn">Order</button>
+        </div>
+      )}
+    </footer>
+  );
+}
+
+function Pizza({ pizzaObj }) {
+  const { name, ingredients, photoName, price, soldOut } = pizzaObj;
+  // if (soldOut) return <p>Sold out</p>;
+  return (
+    <li className={`pizza ${soldOut ? "sold-out" : ""}`}>
+      <img src={photoName} alt={name} />
+      <h2>{name}</h2>
+      <p>{ingredients}</p>
+      <span>{soldOut ? "SOLD OUT" : price}</span>
+    </li>
   );
 }
 
